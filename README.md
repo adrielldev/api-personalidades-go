@@ -1,2 +1,2 @@
-# api-rest-go
-Uma api rest em golang
+# api-personalides-go
+Uma api rest em golang com personalidades famosas e suas histórias.
