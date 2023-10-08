@@ -5,9 +5,20 @@ import (
 	"net/http"
 
 	"github.com/adrielldev/api-rest-go/controllers"
+	"github.com/adrielldev/api-rest-go/middlewares"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 )
 
-func HandleRequest() {
-	http.HandleFunc("/", controllers.Home)
-	log.Fatal(http.ListenAndServe("127.0.0.1:8000", nil))
+func HandleResquest() {
+	r := mux.NewRouter()
+	r.Use(middlewares.ContentTypeMiddleware)
+	r.HandleFunc("/", controllers.Home)
+	r.HandleFunc("/api/personalidades", controllers.TodasPersonalidades).Methods("Get")
+	r.HandleFunc("/api/personalidades/{id}", controllers.RetornaUmaPersonalidade).Methods("Get")
+	r.HandleFunc("/api/personalidades", controllers.CriaPersonalidade).Methods("Post")
+	r.HandleFunc("/api/personalidades/{id}", controllers.DeletaPersonalidade).Methods("Delete")
+	r.HandleFunc("/api/personalidades/{id}", controllers.EditaPersonalidade).Methods("Put")
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r)))
+
 }
